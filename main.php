@@ -6,9 +6,11 @@ include "sg-admin.php";
 class Main {
 
     private $page;
+    private $data;
 
     public function __construct() {
         $this->page = $this->loadPage();
+        $this->data = new DB();
     }
 
     private function loadPage() {
