@@ -1,7 +1,7 @@
 <?php
 
 include "model-sqlite3.php";
-include "sg-main.php";
+include "sg-admin.php";
 
 class Main {
 
