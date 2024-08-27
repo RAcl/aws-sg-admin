@@ -15,7 +15,8 @@ class Main {
 
     private function loadPage() {
         if (empty($_GET) && empty($_POST)) {
-            return $this->template('index');
+            $ip = SG_Admin::getIP();
+            return $this->template('index',array('###IP###'=>$ip));
         }
     }
 
