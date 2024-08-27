@@ -14,10 +14,12 @@ class DB {
 
     private function createDB($database) {
         $this->db = new SQLite3($database);
-        $this->db->exec('CREATE TABLE administrador (id_usuario INTEGER)');
+        $this->db->exec('CREATE TABLE administrador (id_usuario INTEGER);');
         $this->db->exec('CREATE TABLE usuario (alias TEXT, token TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);');
         $this->db->exec('CREATE TABLE grupoSeguridad (descripcion TEXT, sgid TEXT, region TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);');
         $this->db->exec('CREATE TABLE permiso (puerto INTEGER, id_usuario INTEGER, id_grupoSeguridad INTEGER, id INTEGER PRIMARY KEY AUTOINCREMENT);');
+        $this->registrarUsuario('admin','admin1234');
+        $this->db->exec('INSERT INTO administrador values (1);');
     }
 
     private function getDB() {
