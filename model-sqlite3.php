@@ -123,7 +123,7 @@ class DB {
     }
 
     public function getPermisoGrupoSeguridad ($sgID) {
-        $stmt = $this->db->prepare('SELECT per.puerto, usr.alias, usr.id_usuario
+        $stmt = $this->db->prepare('SELECT per.puerto, usr.alias, per.id_usuario
                                     FROM grupoSeguridad as sg
                                     LEFT JOIN permiso as per
                                     ON per.id_grupoSeguridad = sg.id  AND sg.id=:id
