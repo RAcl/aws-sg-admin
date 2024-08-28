@@ -24,8 +24,11 @@
 
         <form method="post" enctype="multipart/form-data" action="?grupo">
             <fieldset>
-                #listaGrupos#
                 <legend>Agregar nuevo Grupo de Seguridad</legend>
+                <fieldset>
+                    <legend>Grupo de Seguridad Actuales:</legend>
+                    #listaGrupos#
+                </fieldset>
                 <div>
                     <label>
                         SG-id: <input name="sgid">
