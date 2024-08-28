@@ -12,7 +12,7 @@ class SG {
                 $myRules = true;
                 $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
                         ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
-                        'sgr-0c8bbc4dc1276b9ac,SecurityGroupRule=\'{Description=' . $rule['Description'] .
+                        ',SecurityGroupRule=\'{Description=' . $rule['Description'] .
                         ',IpProtocol=' .$rule['IpProtocol'] .
                         ',FromPort=' . $rule['FromPort'].
                         ',ToPort=' . $rule['ToPort'].
@@ -85,3 +85,6 @@ class SG {
 //     {
 //         "Return": true
 //     }
+aws ec2 modify-security-group-rules \
+    --group-id sg-019ae8142b0becfb8 \
+    --security-group-rules SecurityGroupRuleId=sgr-0c8bbc4dc1276b9acsgr-0c8bbc4dc1276b9ac,SecurityGroupRule='{Description=user-admin,IpProtocol=tcp,FromPort=443,ToPort=443,CidrIpv4=201.189.202.132/32}'
