@@ -11,7 +11,7 @@ class SG {
             if ($rule['Description'] == 'user-'.$user ) {
                 $myRules = true;
                 $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
-                        '--security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
+                        ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
                         'sgr-0c8bbc4dc1276b9ac,SecurityGroupRule=\'{Description=' . $rule['Description'] .
                         ',IpProtocol=' .$rule['IpProtocol'] .
                         ',FromPort=' . $rule['FromPort'].
