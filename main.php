@@ -10,9 +10,9 @@ class Main {
     private $sg;
 
     public function __construct() {
-        $this->page = $this->loadPage();
         $this->data = new DB();
         $this->sg = new SG();
+        $this->page = $this->loadPage();
     }
 
     private function loadPage() {
