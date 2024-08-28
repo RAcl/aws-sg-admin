@@ -48,7 +48,7 @@ class Main {
         $msg = '';
         if (isset($_SESSION['id'])) {
             if (!empty($Pdata)) {
-                $msg = $this->ejecutar($Pdata);
+                $msg = $this->ejecutarTareaAdm($Pdata);
             } else {
                 $msg = '<!-- By happy -->';
             }
@@ -65,13 +65,20 @@ class Main {
         return $this->template('admin', $param);
     }
 
+    private function ejecutarTareaAdm ($Pdata) {
+        if (isset($_GET['usuario']) && isset($Pdata['user']) && isset($Pdata['token'])) {
+            $id = $this->data->registrarUsuario($Pdata['user'], $Pdata['token']);
+            return ($id?'Registrado '.$Pdata['user'].' con ID:'.$id:'Falló el registro')
+        }
+    }
+
     private function creaSelect ( $name, $opciones, $campoValue, $campoTexto ) {
         $select = '<select name="'.$name.'">';
         $select .= '<option value="0">Seleccione una opción</option>';
         foreach ($opciones as $opcion) {
             $select .= '<option value="'.$opcion[$campoValue].'">'.$opcion[$campoTexto].'</option>';
         }
-        $select .= '</select>' . print_r($opciones, true);
+        $select .= '</select>';
         return $select;
     }
 
@@ -79,6 +86,7 @@ class Main {
         $usrs = $this->data->listarUsuarios();
         return $this->creaSelect( 'usuario', $usrs, 'id', 'alias');
     }
+
     private function creaSelectGrupos () {
         $sgs = $this->data->listarGruposSeguridad();
         return $this->creaSelect( 'sg', $sgs, 'id', 'descripcion');
