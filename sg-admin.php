@@ -1,10 +1,16 @@
 <?php
 
 class SG {
-    public function autoriza () {
+    public function autoriza ($user,$permisos) {
         $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
         $output = json_decode($output, true);
-        return var_dump($output);
+        $myRules = array();
+        foreach($output['SecurityGroupRules'] as $rule) {
+            if ($rule['Description'] == 'user-'.$user ) {
+                $myRules = $rule;
+            }
+        }
+        return print_r($myRules, true);
     }
 
     public static function getIP(){

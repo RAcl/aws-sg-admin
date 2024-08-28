@@ -29,7 +29,7 @@ class Main {
         # $Pdata = $this->limpia($Pdata);
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
         if ($id) 
-            return $this->sg->autoriza($this->data->getPermisoUsuario($id));
+            return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
         else 
             return 'Oops!';
     }
