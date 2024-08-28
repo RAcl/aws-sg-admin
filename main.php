@@ -71,7 +71,7 @@ class Main {
         foreach ($opciones as $opcion) {
             $select .= '<option value="'.$opcion[$campoValue].'">'.$opcion[$campoTexto].'</option>';
         }
-        $select .= '</select>';
+        $select .= '</select>' . print_r($opciones, true);
         return $select;
     }
 
