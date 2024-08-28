@@ -60,6 +60,7 @@ class Main {
             '#mensaje#'=>$msg,
             '#usuarios#'=>$this->creaSelectUsuarios(),
             '#grupos#'=>$this->creaSelectGrupos(),
+            '#listaGrupos#'=>$this->creaListaGrupos()
             '#listaPermisos#'=>$this->creaListaPermisos()
         );
         return $this->template('admin', $param);
@@ -96,6 +97,16 @@ class Main {
         $sgs = $this->data->listarGruposSeguridad();
         return $this->creaSelect( 'sg', $sgs, 'id', 'descripcion');
     }
+
+    private function creaListaGrupos () {
+        $msg = '<table><th><td>SG id</td><td>Descripci&oacute;n</td><td>regi&oacute;n</td></tr>';
+        $sgs = $this->data->listarGruposSeguridad();
+        foreach($sgs as $sg) {
+            $msg .= '<tr><td>'.$sg['sgid'].'</td><td>'.$sg['descripcion'].'</td><td>'.$sg['region'].'</td><tr>';
+        }
+        return $msg.'</table>';
+    }
+
     private function creaListaPermisos () {
         return 'TO DO';
     }
