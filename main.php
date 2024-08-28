@@ -122,7 +122,7 @@ class Main {
             $msg .= '<fieldset><legend>Security Group '.$sg['sgid'].'</legend><table><tr><th>Alias</th><th>Puerto</th></tr>';
             $permisos = $this->data->getPermisoGrupoSeguridad($sg['id']);
             foreach($permisos as $permiso) {
-                $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].'</td></tr>'
+                $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].'</td></tr>';
             }
             $msg .= '</table></fieldset>';
         }
