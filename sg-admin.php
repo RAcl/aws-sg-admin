@@ -17,7 +17,7 @@ class SG {
                         ',FromPort=' . $rule['FromPort'].
                         ',ToPort=' . $rule['ToPort'].
                         ',CidrIpv4='.$this->getIP().'/32}\'';
-                $out .= $change ."\n". shell_exec($change);
+                $out .= $change ."\n";#. shell_exec($change);
             }
         }
         if ($myRules) 
