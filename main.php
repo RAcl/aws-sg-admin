@@ -16,7 +16,10 @@ class Main {
     }
 
     private function loadPage() {
-        if (empty($_GET) && empty($_POST)) {
+        session_start();
+        if (isset($_SESSION['id'])) {
+            return $this->admin();
+        } elseif (empty($_GET) && empty($_POST)) {
             return $this->template('index');
         } elseif ( isset($_GET['login']) && isset($_POST['user']) && isset($_POST['token']) ) {
             return $this->login($_POST);
@@ -37,8 +40,7 @@ class Main {
             return 'Oops!';
     }
 
-    private function admin($id, $Pdata) {
-        session_start();
+    private function admin($id=$_SESSION['id'], $Pdata=array()) {
         $msg = '';
         if (isset($_SESSION['id'])) {
             $msg = '';
