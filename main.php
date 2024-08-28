@@ -66,10 +66,13 @@ class Main {
     }
 
     private function ejecutarTareaAdm ($Pdata) {
-        $msg = "Entré a ejecutarTareaAdm";
+        $msg = '"Entré a ejecutarTareaAdm"';
         if (isset($_GET['usuario']) && isset($Pdata['user']) && isset($Pdata['token'])) {
             $id = $this->data->registrarUsuario($Pdata['user'], $Pdata['token']);
-            $msg = ($id?'Registrado '.$Pdata['user'].' con ID:'.$id:'Falló el registro');
+            $msg = ($id?'Registrado usuario '.$Pdata['user'].' con ID:'.$id:'Falló el registro del usaurio '.$Pdata['user']);
+        } elseif (isset($_GET['grupo']) && isset($Pdata['sgid']) && isset($Pdata['region']) && isset($Pdata['descripcion'])) {
+            $id = $this->data->registrarGrupoSeguridad ($Pdata['sgid'], $Pdata['descripcion'], $Pdata['region']);
+            $msg = ($id?'Registrado grupo '.$Pdata['sgid'].' con ID:'.$id:'Falló el registro del grupo '.$Pdata['sgid']);
         }
         return $msg;
     }
