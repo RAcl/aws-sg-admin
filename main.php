@@ -68,7 +68,7 @@ class Main {
     private function ejecutarTareaAdm ($Pdata) {
         if (isset($_GET['usuario']) && isset($Pdata['user']) && isset($Pdata['token'])) {
             $id = $this->data->registrarUsuario($Pdata['user'], $Pdata['token']);
-            return ($id?'Registrado '.$Pdata['user'].' con ID:'.$id:'Falló el registro')
+            return ($id?'Registrado '.$Pdata['user'].' con ID:'.$id:'Falló el registro');
         }
     }
 
