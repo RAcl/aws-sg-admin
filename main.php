@@ -19,7 +19,7 @@ class Main {
         session_start();
         if (isset($_SESSION['id'])) {
             $id = $_SESSION['id'];
-            return $this->admin($id);
+            return $this->admin($id,);
         } elseif (empty($_GET) && empty($_POST)) {
             return $this->template('index');
         } elseif ( isset($_GET['login']) && isset($_POST['user']) && isset($_POST['token']) ) {
@@ -41,7 +41,7 @@ class Main {
             return 'Oops!';
     }
 
-    private function admin ($id=$_SESSION['id'], $Pdata=array()) {
+    private function admin ($id, $Pdata=array()) {
         $msg = '';
         if (isset($_SESSION['id'])) {
             $msg = '';
