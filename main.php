@@ -76,7 +76,13 @@ class Main {
             $id = $this->data->registrarGrupoSeguridad ($Pdata['sgid'], $Pdata['descripcion'], $Pdata['region']);
             $msg = ($id?'Registrado grupo '.$Pdata['sgid'].' con ID:'.$id:'Falló el registro del grupo '.$Pdata['sgid']);
         } elseif (isset($_GET['permiso'])) {
+            $msg = '';
             $ports = preg_split("/[\s,]+/", $Pdata['port'], -1, PREG_SPLIT_NO_EMPTY);
+            foreach($ports as $port) {
+                $id = $this->data->registrarPermiso($Pdata['gid'], $Pdata['uid'], $port);
+                $msg .= ($id?'Creado permiso al puerto '.$port.' con ID:'.$id:'Falló el registro del puerto '.$port).'<br>';
+        
+            }
             return print_r($ports, true);
         }
         return $msg;
@@ -94,12 +100,12 @@ class Main {
 
     private function creaSelectUsuarios () {
         $usrs = $this->data->listarUsuarios();
-        return $this->creaSelect( 'usuario', $usrs, 'id', 'alias');
+        return $this->creaSelect( 'uid', $usrs, 'id', 'alias');
     }
 
     private function creaSelectGrupos () {
         $sgs = $this->data->listarGruposSeguridad();
-        return $this->creaSelect( 'sg', $sgs, 'id', 'descripcion');
+        return $this->creaSelect( 'gid', $sgs, 'id', 'descripcion');
     }
 
     private function creaListaGrupos () {
