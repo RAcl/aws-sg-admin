@@ -1,12 +1,12 @@
 <?php
 
 class SG {
-    public function autoriza ($user,$permisos) {
+    public function autoriza ($user, $permisos) {
         $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
         $output = json_decode($output, true);
         $myRules = false;
         $msg = 'Error mientras se internta autorizar a '.$user;
-        $out ='';
+        $out = '';
         foreach($output['SecurityGroupRules'] as $rule) {
             if ($rule['Description'] == 'user-'.$user ) {
                 $myRules = true;
@@ -25,6 +25,10 @@ class SG {
         else
             $msg = $this->create_rules($user,$permisos);
         return $msg;
+    }
+
+    private function create_rules ($user, $permisos) {
+        return 'Falta create_rules()';
     }
 
     public function getIP(){

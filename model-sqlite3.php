@@ -138,6 +138,17 @@ class DB {
         return $reg;
     }
 
+    public function es_admin($uid) {
+        $stmt = $this->db->prepare('SELECT id FROM administrador WHERE id=:uid');
+        $stmt->bindParam(':uid', $uid, SQLITE3_INTEGER);
+        $res = $stmt->execute();
+        $reg = $res->fetchArray(SQLITE3_ASSOC);
+        if (!empty($reg)) {
+            return $reg['id'];
+        }
+        return 0;
+    }
+
     // TODO: eliminar permisos, eliminar usuarios, eliminar sg, agregar y eliminar administrador
 }
 

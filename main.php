@@ -28,11 +28,19 @@ class Main {
     private function login($Pdata) {
         # $Pdata = $this->limpia($Pdata);
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
-        if ($id) 
-            return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
-        else 
+        if ($id) {
+            if ($this->data->es_admin($id))
+                return $this->admin();
+            else 
+                return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
+        } else 
             return 'Oops!';
     }
+
+    private function admin() {
+        return 'Soy un admin';
+    }
+
 
     private function template($temp, $param=array()) {
         $buf='';
