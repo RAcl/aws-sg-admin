@@ -81,9 +81,7 @@ class Main {
             foreach($ports as $port) {
                 $id = $this->data->registrarPermiso($Pdata['gid'], $Pdata['uid'], $port);
                 $msg .= ($id?'Creado permiso al puerto '.$port.' con ID:'.$id:'Falló el registro del puerto '.$port).'<br>';
-        
             }
-            return print_r($ports, true);
         }
         return $msg;
     }
@@ -118,7 +116,17 @@ class Main {
     }
 
     private function creaListaPermisos () {
-        return 'TO DO';
+        $msg = '';
+        $sgs = $this->data->listarGruposSeguridad();
+        foreach($sgs as $sg) {
+            $msg .= '<fieldset><legend>Security Group '.$sg['sgid'].'</legend><table><tr><th>Alias</th><th>Puerto</th></tr>';
+            $permisos = $this->data->getPermisoGrupoSeguridad($sg['id']);
+            foreach($permisos as $permiso) {
+                $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].'</td></tr>'
+            }
+            $msg .= '</table></fieldset>';
+        }
+        return $msg;
     }
 
     private function template($temp, $param=array()) {

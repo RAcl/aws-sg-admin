@@ -128,7 +128,8 @@ class DB {
                                     LEFT JOIN permiso as per
                                     ON per.id_grupoSeguridad = sg.id  AND sg.id=:id
                                     INNER JOIN usuario as usr
-                                    ON usr.id = per.id_usuario');
+                                    ON usr.id = per.id_usuario
+                                    ORDER BY usr.alias');
         $stmt->bindParam(':id', $sgID, SQLITE3_INTEGER);
         $res = $stmt->execute();
         $reg = array();
