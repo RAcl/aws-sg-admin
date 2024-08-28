@@ -24,7 +24,7 @@ class SG {
             $msg = 'Autorizado el usuario '.$user .' # '.$out;
         else
             $msg = $this->create_rules($user,$permisos);
-        return $msg
+        return $msg;
     }
 
     public function getIP(){
