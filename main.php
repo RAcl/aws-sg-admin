@@ -25,7 +25,7 @@ class Main {
         } elseif ( isset($_GET['login']) && isset($_POST['user']) && isset($_POST['token']) ) {
             return $this->login($_POST);
         } else {
-            return print_r($_POST,true); //$this->template('index');
+            return $this->template('index');
         }
     }
 
@@ -33,25 +33,59 @@ class Main {
         # $Pdata = $this->limpia($Pdata);
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
         if ($id) {
-            if ($this->data->es_admin($id))
+            if ($this->data->es_admin($id)) {
                 return $this->admin($id, $Pdata);
-            else 
+            } else {
+                session_destroy();
                 return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
-        } else 
+            }
+        } else {
             return 'Oops!';
+        }
     }
 
     private function admin ($id, $Pdata=array()) {
         $msg = '';
         if (isset($_SESSION['id'])) {
-            $msg = '';
+            if (!empty($Pdata)) {
+                $msg = $this->ejecutar($Pdata);
+            } else {
+                $msg = '<!-- By happy -->';
+            }
         } else {
             $_SESSION['id'] = $id;
             $msg = 'Bienvenido '.$Pdata['user'];
         }
-        return $this->template('admin',array('#mensaje#'=>$msg));
+        $param = array(
+            '#mensaje#'=>$msg,
+            '#usuarios#'=>$this->creaSelectUsuarios(),
+            '#grupos#'=>$this->creaSelectGrupos(),
+            '#listaPermisos#'=>$this->creaListaPermisos()
+        );
+        return $this->template('admin', $param);
     }
 
+    private function creaSelect ( $name, $opciones, $campoValue, $campoTexto ) {
+        $select = '<select name="'.$name.'">';
+        $select .= '<option value="0">Seleccione una opción</option>';
+        foreach ($opciones as $opcion) {
+            $select .= '<option value="'.$opcion[$campoValue].'">'.$opcion[$campoTexto].'</option>';
+        }
+        $select .= '</select>';
+        return $select;
+    }
+
+    private function creaSelectUsuarios () {
+        $usrs = $this->data->listarUsuarios();
+        return $this->creaSelect( 'usuario', $usrs, 'id', 'alias');
+    }
+    private function creaSelectGrupos () {
+        $sgs = $this->data->listarGruposSeguridad();
+        return $this->creaSelect( 'sg', $sgs, 'id', 'descripcion');
+    }
+    private function creaListaPermisos () {
+        return 'TO DO';
+    }
 
     private function template($temp, $param=array()) {
         $buf='';

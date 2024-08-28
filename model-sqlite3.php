@@ -123,7 +123,7 @@ class DB {
     }
 
     public function getPermisoGrupoSeguridad ($sgID) {
-        $stmt = $this->db->prepare('SELECT per.puerto, usr.alias
+        $stmt = $this->db->prepare('SELECT per.puerto, usr.alias, usr.id_usuario
                                     FROM grupoSeguridad as sg
                                     LEFT JOIN permiso as per
                                     ON per.id_grupoSeguridad = sg.id  AND sg.id=:id
@@ -147,6 +147,28 @@ class DB {
             return $reg['id_usuario'];
         }
         return 0;
+    }
+
+    public function listarUsuarios () {
+        $stmt = $this->db->prepare('SELECT id, alias, token FROM usuario');
+        $res = $stmt->execute();
+        $reg = $res->fetchArray(SQLITE3_ASSOC);
+        $reg = array();
+        while (($row = $res->fetchArray(SQLITE3_ASSOC))) {
+            $reg[] = $row;
+        }
+        return $reg;
+    }
+
+    public function listarGruposSeguridad () {
+        $stmt = $this->db->prepare('SELECT id, sgid, descripcion, region FROM grupoSeguridad');
+        $res = $stmt->execute();
+        $reg = $res->fetchArray(SQLITE3_ASSOC);
+        $reg = array();
+        while (($row = $res->fetchArray(SQLITE3_ASSOC))) {
+            $reg[] = $row;
+        }
+        return $reg;
     }
 
     // TODO: eliminar permisos, eliminar usuarios, eliminar sg, agregar y eliminar administrador

@@ -27,17 +27,17 @@
                 <legend>Agregar nuevo Grupo de Seguridad</legend>
                 <div>
                     <label>
-                        SG-id:<input name="sgid">
+                        SG-id: <input name="sgid">
                     </label>
                 </div>
                 <div>
                     <label>
-                        Region:<input name="region">
+                        Region: <input name="region">
                     </label>
                 </div>
                 <div>
                     <label>
-                        Descripcion breve:<input name="descripcion">
+                        Descripcion breve: <input name="descripcion">
                     </label>
                 </div>
                 <button type="submit">Enviar</button>
@@ -49,21 +49,23 @@
                 <legend>Agregar nuevo Permiso</legend>
                 <div>
                     <label>
-                        usuario:<input name="uid">
+                        Usuario: #usuarios#
                     </label>
                 </div>
                 <div>
                     <label>
-                        grupo:<input name="gid">
+                        Grupo: #grupos#
                     </label>
                 </div>
                 <div>
                     <label>
-                        ingrese puertos separados por coma:<input name="port">
+                        Ingrese puertos separados por coma: <input name="port">
                     </label>
                 </div>
                 <button type="submit">Enviar</button>
             </fieldset>
         </form>
+        <!-- Quitar permisos desde la lista-->
+        #listaPermisos#
     </body>
 </html>
