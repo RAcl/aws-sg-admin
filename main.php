@@ -30,15 +30,23 @@ class Main {
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
         if ($id) {
             if ($this->data->es_admin($id))
-                return $this->admin();
+                return $this->admin($id, $Pdata);
             else 
                 return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
         } else 
             return 'Oops!';
     }
 
-    private function admin() {
-        return 'Soy un admin';
+    private function admin($id, $Pdata) {
+        session_start();
+        $msg = '';
+        if (isset($_SESSION['id'])) {
+            $msg = '';
+        } else {
+            $_SESSION['id'] = $id;
+            $msg = 'Bienvenido '.$Pdata['user'];
+        }
+        return $this->template('admin',array('#mensaje#'=>$msg));
     }
 
 

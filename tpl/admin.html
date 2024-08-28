@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Administracion</title>
+    </head>
+    <body>
+        <div>#mensaje#</div>
+        <form method="post" enctype="multipart/form-data" action="?usuario">
+            <fieldset>
+                <legend>Crear Nuevo Usuario</legend>
+                <div>
+                    <label>
+                        Usuario:<input name="user">
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Token:<input name="token">
+                    </label>
+                </div>
+                <button type="submit">Enviar</button>
+            </fieldset>
+        </form>
+
+        <form method="post" enctype="multipart/form-data" action="?grupo">
+            <fieldset>
+                <legend>Agregar nuevo Grupo de Seguridad</legend>
+                <div>
+                    <label>
+                        SG-id:<input name="sgid">
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Region:<input name="region">
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Descripcion breve:<input name="descripcion">
+                    </label>
+                </div>
+                <button type="submit">Enviar</button>
+            </fieldset>
+        </form>
+
+        <form method="post" enctype="multipart/form-data" action="?permiso">
+            <fieldset>
+                <legend>Agregar nuevo Permiso</legend>
+                <div>
+                    <label>
+                        usuario:<input name="uid">
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        grupo:<input name="gid">
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        ingrese puertos separados por coma:<input name="port">
+                    </label>
+                </div>
+                <button type="submit">Enviar</button>
+            </fieldset>
+        </form>
+    </body>
+</html>
