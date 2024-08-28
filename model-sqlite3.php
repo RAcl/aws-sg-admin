@@ -139,7 +139,7 @@ class DB {
     }
 
     public function es_admin($uid) {
-        $stmt = $this->db->prepare('SELECT id FROM administrador WHERE id_usuario=:u_id');
+        $stmt = $this->db->prepare('SELECT id_usuario FROM administrador WHERE id_usuario=:u_id');
         $stmt->bindParam(':u_id', $uid, SQLITE3_INTEGER);
         $res = $stmt->execute();
         $reg = $res->fetchArray(SQLITE3_ASSOC);
