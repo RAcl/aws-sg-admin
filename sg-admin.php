@@ -6,6 +6,7 @@ class SG {
         $output = json_decode($output, true);
         $myRules = false;
         $msg = 'Error mientras se internta autorizar a '.$user;
+        $out ='';
         foreach($output['SecurityGroupRules'] as $rule) {
             if ($rule['Description'] == 'user-'.$user ) {
                 $myRules = true;
@@ -16,14 +17,14 @@ class SG {
                         ',FromPort=' . $rule['FromPort'].
                         ',ToPort=' . $rule['ToPort'].
                         ',CidrIpv4='.$this->getIP().'/32}\'';
-                shell_exec($change);
+                $out .= $change ."\n". shell_exec($change);
             }
         }
         if ($myRules) 
-            $msg = 'Autorizado el usuario '.$user;
+            $msg = 'Autorizado el usuario '.$user .' # '.$out;
         else
             $msg = $this->create_rules($user,$permisos);
-        return print_r($myRules, true);
+        return $msg
     }
 
     public function getIP(){
