@@ -1,6 +1,11 @@
 <?php
 
-class SG_Admin{
+class SG {
+    public function autoriza () {
+        $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
+        return $output;
+    }
+
     public static function getIP(){
         if (isset($_SERVER["HTTP_CLIENT_IP"])){
             return $_SERVER["HTTP_CLIENT_IP"];

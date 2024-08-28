@@ -7,16 +7,23 @@ class Main {
 
     private $page;
     private $data;
+    private $sg;
 
     public function __construct() {
         $this->page = $this->loadPage();
         $this->data = new DB();
+        $this->sg = new SG();
     }
 
     private function loadPage() {
         if (empty($_GET) && empty($_POST)) {
-            $ip = SG_Admin::getIP();
-            return $this->template('index',array('###IP###'=>$ip));
+            return $this->template('index');
+        } elseif ( isset($_GET['login']) && isset($_POST['user']) && isset($_POST['token']) ) {
+            $id = $this->data->validaUsuario($_POST['user'],$_POST['token'])
+            if ($id) return $this->sg->autoriza($this->data->getPermisoUsuario($id));
+            else return '';
+        } else {
+            return $this->template('index');
         }
     }
 
