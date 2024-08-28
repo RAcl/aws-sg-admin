@@ -60,7 +60,7 @@ class Main {
             '#mensaje#'=>$msg,
             '#usuarios#'=>$this->creaSelectUsuarios(),
             '#grupos#'=>$this->creaSelectGrupos(),
-            '#listaGrupos#'=>$this->creaListaGrupos()
+            '#listaGrupos#'=>$this->creaListaGrupos(),
             '#listaPermisos#'=>$this->creaListaPermisos()
         );
         return $this->template('admin', $param);
