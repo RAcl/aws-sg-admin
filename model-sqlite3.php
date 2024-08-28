@@ -144,7 +144,7 @@ class DB {
         $res = $stmt->execute();
         $reg = $res->fetchArray(SQLITE3_ASSOC);
         if (!empty($reg)) {
-            return $reg['id'];
+            return $reg['id_usuario'];
         }
         return 0;
     }
