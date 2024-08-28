@@ -4,16 +4,29 @@ class SG {
     public function autoriza ($user,$permisos) {
         $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
         $output = json_decode($output, true);
-        $myRules = array();
+        $myRules = false;
+        $msg = 'Error mientras se internta autorizar a '.$user;
         foreach($output['SecurityGroupRules'] as $rule) {
             if ($rule['Description'] == 'user-'.$user ) {
-                $myRules = $rule;
+                $myRules = true;
+                $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
+                        '--security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
+                        'sgr-0c8bbc4dc1276b9ac,SecurityGroupRule=\'{Description=' . $rule['Description'] .
+                        ',IpProtocol=' .$rule['IpProtocol'] .
+                        ',FromPort=' . $rule['FromPort'].
+                        ',ToPort=' . $rule['ToPort'].
+                        ',CidrIpv4='.$this->getIP().'/32}\'';
+                shell_exec($change);
             }
         }
+        if ($myRules) 
+            $msg = 'Autorizado el usuario '.$user;
+        else
+            $msg = $this->create_rules($user,$permisos);
         return print_r($myRules, true);
     }
 
-    public static function getIP(){
+    public function getIP(){
         if (isset($_SERVER["HTTP_CLIENT_IP"])){
             return $_SERVER["HTTP_CLIENT_IP"];
         }elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])){
