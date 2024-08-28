@@ -152,7 +152,6 @@ class DB {
     public function listarUsuarios () {
         $stmt = $this->db->prepare('SELECT id, alias, token FROM usuario');
         $res = $stmt->execute();
-        $reg = $res->fetchArray(SQLITE3_ASSOC);
         $reg = array();
         while (($row = $res->fetchArray(SQLITE3_ASSOC))) {
             $reg[] = $row;
@@ -163,7 +162,6 @@ class DB {
     public function listarGruposSeguridad () {
         $stmt = $this->db->prepare('SELECT id, sgid, descripcion, region FROM grupoSeguridad');
         $res = $stmt->execute();
-        $reg = $res->fetchArray(SQLITE3_ASSOC);
         $reg = array();
         while (($row = $res->fetchArray(SQLITE3_ASSOC))) {
             $reg[] = $row;
