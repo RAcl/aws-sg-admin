@@ -3,7 +3,8 @@
 class SG {
     public function autoriza () {
         $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
-        return $output;
+        $output = json_decode($output, true);
+        return var_dump($output);
     }
 
     public static function getIP(){
