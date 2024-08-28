@@ -17,11 +17,11 @@ class SG {
                         ',FromPort=' . $rule['FromPort'].
                         ',ToPort=' . $rule['ToPort'].
                         ',CidrIpv4='.$this->getIP().'/32}\'';
-                $out .= $change ."\n";#. shell_exec($change);
+                $out .= "\n".$change ."\n". shell_exec($change);
             }
         }
         if ($myRules) 
-            $msg = 'Autorizado el usuario '.$user .' # '.$out;
+            $msg = 'Autorizado el usuario '.$user ."\n". $out;
         else
             $msg = $this->create_rules($user,$permisos);
         return $msg;
