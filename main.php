@@ -57,23 +57,27 @@ class Main {
             $msg = 'Bienvenido '.$Pdata['user'];
         }
         $param = array(
-            '#mensaje#'=>$msg,
-            '#usuarios#'=>$this->creaSelectUsuarios(),
-            '#grupos#'=>$this->creaSelectGrupos(),
-            '#listaGrupos#'=>$this->creaListaGrupos(),
-            '#listaPermisos#'=>$this->creaListaPermisos()
+            '#mensaje#' => $msg,
+            '#usuarios#' => $this->creaSelectUsuarios(),
+            '#grupos#' => $this->creaSelectGrupos(),
+            '#listaGrupos#' => $this->creaListaGrupos(),
+            '#listaPermisos#' => $this->creaListaPermisos(),
+            '#token-sugerido#' => $this->tokenSugerido()
         );
         return $this->template('admin', $param);
     }
 
     private function ejecutarTareaAdm ($Pdata) {
-        $msg = '"Entré a ejecutarTareaAdm"';
+        $msg = '"Entré a ejecutarTareaAdm"'.print_r($Pdata, true);
         if (isset($_GET['usuario']) && isset($Pdata['user']) && isset($Pdata['token'])) {
             $id = $this->data->registrarUsuario($Pdata['user'], $Pdata['token']);
             $msg = ($id?'Registrado usuario '.$Pdata['user'].' con ID:'.$id:'Falló el registro del usaurio '.$Pdata['user']);
         } elseif (isset($_GET['grupo']) && isset($Pdata['sgid']) && isset($Pdata['region']) && isset($Pdata['descripcion'])) {
             $id = $this->data->registrarGrupoSeguridad ($Pdata['sgid'], $Pdata['descripcion'], $Pdata['region']);
             $msg = ($id?'Registrado grupo '.$Pdata['sgid'].' con ID:'.$id:'Falló el registro del grupo '.$Pdata['sgid']);
+        } elseif (isset($_GET['permiso']) {
+            $ports=preg_split('[\s,]', $Pdata['port'], -1, PREG_SPLIT_NO_EMPTY);
+            return print_r($ports, true);
         }
         return $msg;
     }
@@ -99,10 +103,10 @@ class Main {
     }
 
     private function creaListaGrupos () {
-        $msg = '<table><tr><th>SG id</th><th>Descripci&oacute;n</th><th>regi&oacute;n</th></tr>';
+        $msg = '<table><tr><th class="gris1">SG id</th><th>Descripci&oacute;n</th><th class="gris1">regi&oacute;n</th></tr>';
         $sgs = $this->data->listarGruposSeguridad();
         foreach($sgs as $sg) {
-            $msg .= '<tr><td>'.$sg['sgid'].'</td><td>'.$sg['descripcion'].'</td><td>'.$sg['region'].'</td><tr>';
+            $msg .= '<tr><td class="gris1">'.$sg['sgid'].'</td><td>'.$sg['descripcion'].'</td><td class="gris1">'.$sg['region'].'</td><tr>';
         }
         return $msg.'</table>';
     }
@@ -128,6 +132,10 @@ class Main {
         } catch( ErrorException $e ) {
             return '';
         }
+    }
+
+    private function tokenSugerido () {
+        return shell_exec('date | md5sum | awk \'{print $1}\'');
     }
 
     public function show() {
