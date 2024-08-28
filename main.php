@@ -99,7 +99,7 @@ class Main {
     }
 
     private function creaListaGrupos () {
-        $msg = '<table><th><td>SG id</td><td>Descripci&oacute;n</td><td>regi&oacute;n</td></tr>';
+        $msg = '<table><tr><th>SG id</th><th>Descripci&oacute;n</th><th>regi&oacute;n</th></tr>';
         $sgs = $this->data->listarGruposSeguridad();
         foreach($sgs as $sg) {
             $msg .= '<tr><td>'.$sg['sgid'].'</td><td>'.$sg['descripcion'].'</td><td>'.$sg['region'].'</td><tr>';
