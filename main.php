@@ -75,7 +75,7 @@ class Main {
         } elseif (isset($_GET['grupo']) && isset($Pdata['sgid']) && isset($Pdata['region']) && isset($Pdata['descripcion'])) {
             $id = $this->data->registrarGrupoSeguridad ($Pdata['sgid'], $Pdata['descripcion'], $Pdata['region']);
             $msg = ($id?'Registrado grupo '.$Pdata['sgid'].' con ID:'.$id:'Falló el registro del grupo '.$Pdata['sgid']);
-        } elseif (isset($_GET['permiso']) {
+        } elseif (isset($_GET['permiso'])) {
             $ports=preg_split('[\s,]', $Pdata['port'], -1, PREG_SPLIT_NO_EMPTY);
             return print_r($ports, true);
         }
