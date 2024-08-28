@@ -129,7 +129,7 @@ class DB {
                                     ON per.id_grupoSeguridad = sg.id  AND sg.id=:id
                                     INNER JOIN usuario as usr
                                     ON usr.id = per.id_usuario
-                                    ORDER BY usr.alias');
+                                    ORDER BY usr.alias, per.puerto');
         $stmt->bindParam(':id', $sgID, SQLITE3_INTEGER);
         $res = $stmt->execute();
         $reg = array();
