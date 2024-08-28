@@ -23,7 +23,7 @@ class Main {
             if ($id) return $this->sg->autoriza($this->data->getPermisoUsuario($id));
             else return '';
         } else {
-            return $this->template('index');
+            return print_r($_POST,true); //$this->template('index');
         }
     }
 
