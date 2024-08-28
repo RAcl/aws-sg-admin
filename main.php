@@ -19,7 +19,7 @@ class Main {
         if (empty($_GET) && empty($_POST)) {
             return $this->template('index');
         } elseif ( isset($_GET['login']) && isset($_POST['user']) && isset($_POST['token']) ) {
-            $id = $this->data->validaUsuario($_POST['user'],$_POST['token'])
+            $id = $this->data->validaUsuario($_POST['user'],$_POST['token']);
             if ($id) return $this->sg->autoriza($this->data->getPermisoUsuario($id));
             else return '';
         } else {
