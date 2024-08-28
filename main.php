@@ -66,10 +66,12 @@ class Main {
     }
 
     private function ejecutarTareaAdm ($Pdata) {
+        $msg = "Entré a ejecutarTareaAdm";
         if (isset($_GET['usuario']) && isset($Pdata['user']) && isset($Pdata['token'])) {
             $id = $this->data->registrarUsuario($Pdata['user'], $Pdata['token']);
-            return ($id?'Registrado '.$Pdata['user'].' con ID:'.$id:'Falló el registro');
+            $msg = ($id?'Registrado '.$Pdata['user'].' con ID:'.$id:'Falló el registro');
         }
+        return $msg;
     }
 
     private function creaSelect ( $name, $opciones, $campoValue, $campoTexto ) {
