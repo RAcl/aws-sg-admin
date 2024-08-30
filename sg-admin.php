@@ -2,7 +2,7 @@
 
 class SG {
     public function autoriza ($user, $permisos) {
-        $msg = 'Aplicando reglas';
+        $msg = '{"status":"error"}';
         $sgids = $this->obtenerSGdesdePermisos($permisos);
         foreach($sgids as $sgid) {
             $reglasActuales = $this->obtenerReglasFromSG($sgid, $user);
@@ -11,6 +11,7 @@ class SG {
             $msg .= $this->actualizaReglas($arregloReglas['comunes']);
             $msg .= $this->agregaReglas($arregloReglas['nuevas']);
             $msg .= $this->eliminaReglas($arregloReglas['deprecadas']);
+            $msg = '{"status":"ok"}'; // comentar para ver
         }
         return $msg;
     }

@@ -37,6 +37,7 @@ class Main {
                 return $this->admin($id, $Pdata);
             } else {
                 session_destroy();
+                header('Content-Type: application/json; charset=utf-8');
                 return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
             }
         } else {
