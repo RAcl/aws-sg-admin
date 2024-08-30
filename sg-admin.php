@@ -7,7 +7,7 @@ class SG {
         foreach($sgids as $sgid) {
             $reglasActuales = $this->obtenerReglasFromSG($sgid, $user);
             $permisosDelSG = $this->obtenerPermisosFiltadoSG($sgid);
-            $arregloReglas = $this->diferenciaDeReglas($permisos, $reglasActuales);
+            $arregloReglas = $this->diferenciaDeReglas($permisosDelSG, $reglasActuales);
             $msg .= $this->actualizaReglas($arregloReglas['comunes']);
             $msg .= $this->agregaReglas($arregloReglas['nuevas']);
             $msg .= $this->eliminaReglas($arregloReglas['deprecadas']);
