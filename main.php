@@ -139,7 +139,7 @@ class Main {
                 $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].
                 '</td><td><form method="post" enctype="multipart/form-data" action="?quitar">'.
                 '<input type="hidden" name="id" value="'.$permiso['id'].'"><button type="submit">Quitar</button>'.
-                '</form></td></tr>';
+                '</form>-</td></tr>';
             }
             $msg .= '</table></fieldset>';
         }
