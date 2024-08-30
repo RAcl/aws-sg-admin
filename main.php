@@ -95,7 +95,7 @@ class Main {
             }
         } elseif (isset($_GET['quitar']) && isset($Pdata['id'])) {
             $logrado = $this->data->eliminarPermiso($Pdata['id']);
-            $msg = ($id?'Permiso eliminado ':'Error al eliminar '.$Pdata['id']);
+            $msg = ($logrado?'Permiso eliminado ':'Error al eliminar '.$Pdata['id']);
         }
         return $msg;
     }

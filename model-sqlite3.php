@@ -177,31 +177,8 @@ class DB {
         $stmt = $this->db->prepare('DELETE FROM permiso WHERE id=:id');
         $stmt->bindParam(':id', $id, SQLITE3_INTEGER);
         $res = $stmt->execute();
-        echo "res:";
-        var_dump($res);
-        echo "res->fetchArray:";
-        print_r($res->fetchArray(SQLITE3_ASSOC));
-        return true;
+        return ($res != false);
     }
 
-    // TODO: eliminar permisos, eliminar usuarios, eliminar sg, agregar y eliminar administrador
+    // TODO: eliminar usuarios, eliminar sg, agregar y eliminar administrador
 }
-
-// $x = new DB();
-// //*
-// $id_u = $x->registrarUsuario('roy2','test-token');
-// print_r($id_u);
-// $id_g = $x->registrarGrupoSeguridad('sg-123test2','Grupo falso de test', 'us-west-2');
-// print_r($id_g);
-// if ($id_g && $id_u) {
-//     $x->registrarPermiso($id_g, $id_u, 631);
-//     $x->registrarPermiso($id_g, $id_u, 80);
-//     $x->registrarPermiso($id_g, $id_u, 631);
-// }
-// // */
-// $r = $x->validaUsuario('roy2','test-token');
-// if ($r) {
-//     print_r($x->getPermisoUsuario($r));
-// } else {
-//     print('no es correcto o no existe');
-// }
