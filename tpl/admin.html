@@ -12,13 +12,21 @@ fieldset {
 label,input,select,button {
     margin: 4px;
 }
+td,tr,th {
+    margin: 4px;
+    padding: 4px;
+}
 .gris1 {
     background-color: gainsboro;
+}
+.mensaje {
+    background-color:coral;
+    padding: 16px;
 }
         </style>
     </head>
     <body>
-        <div>#mensaje#</div>
+        <div class="mensaje">#mensaje#</div>
         <form method="post" enctype="multipart/form-data" action="?usuario">
             <fieldset>
                 <legend>Crear Nuevo Usuario</legend>
