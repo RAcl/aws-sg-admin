@@ -87,7 +87,7 @@ class SG {
             }
             foreach ($permisos as $permiso) {
                 if (!$this->buscaEnArreglo($permiso['puerto'], $reglasActuales, 'ToPort')) {
-                    $soloEnPermisos[]=$rule;
+                    $soloEnPermisos[]=$permiso;
                 }
             }
         } elseif (!empty($permisos)) {
