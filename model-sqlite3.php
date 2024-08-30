@@ -178,7 +178,7 @@ class DB {
         $stmt->bindParam(':id', $id, SQLITE3_INTEGER);
         $res = $stmt->execute();
         echo "res:";
-        print_r($res);
+        var_dump($res);
         echo "res->fetchArray:";
         print_r($res->fetchArray(SQLITE3_ASSOC));
         return true;

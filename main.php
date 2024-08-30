@@ -95,7 +95,7 @@ class Main {
             }
         } elseif (isset($_GET['quitar']) && isset($Pdata['id'])) {
             $logrado = $this->data->eliminarPermiso($id);
-            $msg = ($id?'Eliminado '.$id.', usuario:"'.$Pdata['user'].'" con token:"'.$Pdata['token'].'"':'Falló el registro del usaurio '.$Pdata['user']);
+            $msg = ($id?'Permiso eliminado ':'Error al eliminar '.$Pdata['id']);
         }
         return $msg;
     }
@@ -139,7 +139,7 @@ class Main {
                 $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].
                 '</td><td><form method="post" enctype="multipart/form-data" action="?quitar">'.
                 '<input type="hidden" name="id" value="'.$permiso['id'].'"><button type="submit">Quitar</button>'.
-                '</form>-</td></tr>';
+                '</form></td></tr>';
             }
             $msg .= '</table></fieldset>';
         }
