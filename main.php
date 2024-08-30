@@ -20,17 +20,25 @@ class Main {
         if (isset($_SESSION['id'])) {
             $id = $_SESSION['id'];
             return $this->admin($id, $_POST);
-        } elseif (empty($_GET) && empty($_POST)) {
-            return $this->template('index');
         } elseif ( isset($_GET['login']) && isset($_POST['user']) && isset($_POST['token']) ) {
             return $this->login($_POST);
+        } elseif ( isset($_GET['api']) && isset($_GET['user']) && isset($_GET['token']) ) {
+            return $this->login($_GET);
         } else {
             return $this->template('index');
         }
     }
 
+    private function limpia($dato) {
+        $x = array();
+        foreach($dato as $i => $v) {
+            $x[$i] = preg_replace("/[\s,;%]+/",'',$v);
+        }
+        return $x;
+    }
+
     private function login ($Pdata) {
-        # $Pdata = $this->limpia($Pdata);
+        $Pdata = $this->limpia($Pdata);
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
         if ($id) {
             if ($this->data->es_admin($id)) {
@@ -41,7 +49,8 @@ class Main {
                 return $this->sg->autoriza($Pdata['user'], $this->data->getPermisoUsuario($id));
             }
         } else {
-            return 'Oops!';
+            header('Content-Type: application/json; charset=utf-8');
+            return '{"status":"login error"}';
         }
     }
 
@@ -72,7 +81,7 @@ class Main {
         $msg = '"Entré a ejecutarTareaAdm"'.print_r($Pdata, true);
         if (isset($_GET['usuario']) && isset($Pdata['user']) && isset($Pdata['token'])) {
             $id = $this->data->registrarUsuario($Pdata['user'], $Pdata['token']);
-            $msg = ($id?'Registrado usuario '.$Pdata['user'].' con ID:'.$id:'Falló el registro del usaurio '.$Pdata['user']);
+            $msg = ($id?'Registro '.$id.', usuario:"'.$Pdata['user'].'" con token:"'.$Pdata['token'].'"':'Falló el registro del usaurio '.$Pdata['user']);
         } elseif (isset($_GET['grupo']) && isset($Pdata['sgid']) && isset($Pdata['region']) && isset($Pdata['descripcion'])) {
             $id = $this->data->registrarGrupoSeguridad ($Pdata['sgid'], $Pdata['descripcion'], $Pdata['region']);
             $msg = ($id?'Registrado grupo '.$Pdata['sgid'].' con ID:'.$id:'Falló el registro del grupo '.$Pdata['sgid']);

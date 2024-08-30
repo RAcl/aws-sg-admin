@@ -2,7 +2,7 @@
 
 class SG {
     public function autoriza ($user, $permisos) {
-        $msg = '{"status":"error"}';
+        $msg = '{"status":"update and upgrade error"}';
         $sgids = $this->obtenerSGdesdePermisos($permisos);
         foreach($sgids as $sgid) {
             $reglasActuales = $this->obtenerReglasFromSG($sgid, $user);
