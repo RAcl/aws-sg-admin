@@ -6,6 +6,7 @@ class SG {
         $sgids = $this->obtenerSGdesdePermisos($permisos);
         foreach($sgids as $sgid) {
             $reglasActuales = $this->obtenerReglasFromSG($sgid, $user);
+            $permisosDelSG = $this->obtenerPermisosFiltadoSG($sgid);
             $arregloReglas = $this->diferenciaDeReglas($permisos, $reglasActuales);
             $msg .= $this->actualizaReglas($arregloReglas['comunes']);
             $msg .= $this->agregaReglas($arregloReglas['nuevas']);
@@ -46,6 +47,16 @@ class SG {
         return $sgids;
     }
 
+    private function obtenerPermisosFiltadoSG($sgid) {
+        $p = array();
+        foreach($permisos as $permiso) {
+            if ($permiso['sgid'] == $sgid) {
+                $p[] = $permiso;
+            }
+        }
+        return $p;
+    }
+
     private function obtenerReglasFromSG($SG, $user='') {
         $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="'.$SG.'"');
         $output = json_decode($output, true);
@@ -68,6 +79,7 @@ class SG {
         # y las que existe solo en las actuales (deprecadas)
         echo 'Permisos: '.print_r($permisos,true);
         echo 'reglas: '.print_r($reglasActuales,true);
+
     }
 
     private function actualizaReglas ($rules) {
