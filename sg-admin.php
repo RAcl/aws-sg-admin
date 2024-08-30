@@ -61,7 +61,7 @@ class SG {
         $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="'.$SG.'"');
         $output = json_decode($output, true);
         $salida = array();
-        if (!empty($user)) {
+        if (!empty($user) && !empty($output)) {
             foreach($output['SecurityGroupRules'] as $rule) {
                 if ($rule['Description'] == 'user-'.$user ) {
                     $salida[]=$rule;
@@ -126,6 +126,7 @@ class SG {
                 ',FromPort=' . $rule['FromPort'].
                 ',ToPort=' . $rule['ToPort'].
                 ',CidrIpv4='.$this->getIP().'/32}\'';
+            echo "<br>change= ".print_r($change, true);
             $out = shell_exec($change);
             $msg .= ', en '. $rule['GroupId'] . ' actualizada IP para puerto '.$rule['ToPort'];
         }
@@ -143,6 +144,7 @@ class SG {
                     ',IpRanges="[{CidrIp='.$this->getIP() .
                     '/32,Description=user-'.$rule['alias'].'}]" ' .
                     '--region '.$rule['region'];
+            echo "<br>add= ".print_r($add, true);
             $out = shell_exec($add);
             $msg .= ', en '. $rule['sgid'] . ' agregada IP para puerto '.$rule['puerto'];
         }
@@ -157,6 +159,7 @@ class SG {
                     '--protocol ' . $rule['IpProtocol'] .
                     '--port ' . $rule['FromPort'] .
                     '--cidr ' . $rule['CidrIpv4'];
+            echo "<br>del= ".print_r($del, true);
             $out = shell_exec($del);
             $msg .= ', en '. $rule['sgid'] . ' quitada regla para puerto '.$rule['puerto'];
         }
