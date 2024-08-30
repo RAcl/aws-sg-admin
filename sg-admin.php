@@ -74,19 +74,51 @@ class SG {
     }
 
     private function diferenciaDeReglas ($permisos, $reglasActuales) {
-        # revisar y catalogar las reglas en las comunes,
-        # las que existen solo en los permisos (nuevas)
-        # y las que existe solo en las actuales (deprecadas)
-        echo 'Permisos: '.print_r($permisos,true);
-        echo 'reglas: '.print_r($reglasActuales,true);
+        $soloEnReglas = array();
+        $soloEnPermisos = array();
+        $comunes = array();
+        if (!empty($permisos) && !empty($reglasActuales)) {
+            foreach ($reglasActuales as $rule) {
+                if ($this->buscaEnArreglo($rule['ToPort'],$permisos,'puerto')) {
+                    $comunes[]=$rule;
+                } else {
+                    $soloEnReglas[]=$rule;
+                }
+            }
+            foreach ($permisos as $permiso) {
+                if (!$this->buscaEnArreglo($permiso['puerto'], $reglasActuales, 'ToPort')) {
+                    $soloEnPermisos[]=$rule;
+                }
+            }
+        } elseif (!empty($permisos)) {
+            $soloEnPermisos=$permisos;
+        } else { # ho hay permisos
+            $soloEnReglas=$reglasActuales;
+        }
+        return array(
+            'comunes' => $comunes,
+            'nuevas' => $soloEnPermisos,
+            'deprecadas' => $soloEnReglas
+        );
+    }
 
+    private function buscaEnArreglo($aguja, $pajar, $campo) {
+        $encontrado = false;
+        foreach($pajar as $elem) {
+            if ($elem[$campo] == $aguja) {
+                $encontrado=true;
+                break;
+            }
+        }
+        return $encontrado;
     }
 
     private function actualizaReglas ($rules) {
         # contiene reglas desde el SG actual, actualizar IP
         $msg = '';
         foreach ($rules as $rule) {
-            $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
+            $change='aws ec2 modify-security-group-rules' .
+                ' --group-id '. $rule['GroupId'] .
                 ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
                 ',SecurityGroupRule=\'{Description=' . $rule['Description'] .
                 ',IpProtocol=' .$rule['IpProtocol'] .
@@ -99,8 +131,34 @@ class SG {
         return $msg;
     }
     
-    private function agregaReglas($rules){}
-    private function eliminaReglas($rules){}
+    private function agregaReglas($rules) {
+        $msg = '';
+        foreach ($rules as $rule) {
+            $add = 'aws ec2 authorize-security-group-ingress --group-id ' .
+                    $rule['sgid'] .
+                    '--ip-permissions IpProtocol=tcp,FromPort=' . $rule['puerto'] .
+                    ',ToPort=' . $rule['puerto'] .
+                    ',IpRanges="[{CidrIp='.$this->getIP() .
+                    '/32,Description=user-'.$rule['alias'].'}]" ' .
+                    '--region '.$rule['region'];
+            $out = shell_exec($add);
+            $msg .= ', en '. $rule['sgid'] . ' agregada IP para puerto '.$rule['puerto'];
+        }
+        return $msg;
+    }
+    private function eliminaReglas($rules) {
+        $msg = '';
+        foreach ($rules as $rule) {
+            $del = 'aws ec2 revoke-security-group-ingress ' .
+                    '--group-id ' . $rule['GroupId'] .
+                    '--protocol ' . $rule['IpProtocol'] .
+                    '--port ' . $rule['FromPort'] .
+                    '--cidr ' . $rule['CidrIpv4'];
+            $out = shell_exec($del);
+            $msg .= ', en '. $rule['sgid'] . ' quitada regla para puerto '.$rule['puerto'];
+        }
+        return $msg;
+    }
 
     private function create_rules ($user, $permisos) {
         return 'Falta create_rules()';
@@ -139,7 +197,7 @@ class SG {
 // aws ec2 authorize-security-group-ingress \
 //     --group-id sg-019ae8142b0becfb8 \
 //     --ip-permissions IpProtocol=tcp,FromPort=443,ToPort=443,IpRanges="[{CidrIp=0.0.0.0/0,Description=https}]"
-//
+
 // {
 //     "Return": true,
 //     "SecurityGroupRules": [
