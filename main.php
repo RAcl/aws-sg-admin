@@ -80,6 +80,7 @@ class Main {
             $ports = preg_split("/[\s,]+/", $Pdata['port'], -1, PREG_SPLIT_NO_EMPTY);
             foreach($ports as $port) {
                 $id = $this->data->registrarPermiso($Pdata['gid'], $Pdata['uid'], $port);
+                $resp = $this->sg->
                 $msg .= ($id?'Creado permiso al puerto '.$port.' con ID:'.$id:'Falló el registro del puerto '.$port).'<br>';
             }
         }
@@ -116,7 +117,7 @@ class Main {
     }
 
     private function creaListaPermisos () {
-        $msg = '';
+        $msg = '<fieldset><legend>Permisos actuales</legend>';
         $sgs = $this->data->listarGruposSeguridad();
         foreach($sgs as $sg) {
             $msg .= '<fieldset><legend>Security Group '.$sg['sgid'].'</legend><table><tr><th>Alias</th><th>Puerto</th></tr>';
@@ -126,7 +127,7 @@ class Main {
             }
             $msg .= '</table></fieldset>';
         }
-        return $msg;
+        return $msg.'</fieldset>';
     }
 
     private function template($temp, $param=array()) {

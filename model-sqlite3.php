@@ -112,7 +112,8 @@ class DB {
                                     LEFT JOIN permiso as per
                                     ON usr.id = per.id_usuario AND usr.id=:id
                                     INNER JOIN grupoSeguridad as sg
-                                    ON per.id_grupoSeguridad = sg.id');
+                                    ON per.id_grupoSeguridad = sg.id
+                                    ORDER BY sg.id, per.puerto');
         $stmt->bindParam(':id', $userID, SQLITE3_INTEGER);
         $res = $stmt->execute();
         $reg = array();

@@ -2,30 +2,93 @@
 
 class SG {
     public function autoriza ($user, $permisos) {
-        $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
-        $output = json_decode($output, true);
-        $myRules = false;
-        $msg = 'Error mientras se internta autorizar a '.$user;
-        $out = '';
-        foreach($output['SecurityGroupRules'] as $rule) {
-            if ($rule['Description'] == 'user-'.$user ) {
-                $myRules = true;
-                $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
-                        ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
-                        ',SecurityGroupRule=\'{Description=' . $rule['Description'] .
-                        ',IpProtocol=' .$rule['IpProtocol'] .
-                        ',FromPort=' . $rule['FromPort'].
-                        ',ToPort=' . $rule['ToPort'].
-                        ',CidrIpv4='.$this->getIP().'/32}\'';
-                $out .= "\n".$change ."\n". shell_exec($change);
-            }
+        $msg = '';
+        $sgids = $this->obtenerSGdesdePermisos($permisos);
+        foreach($sgids as $sgid) {
+            $reglasActuales = $this->obtenerReglasFromSG($sgid, $user);
+            $arregloReglas = $this->diferenciaDeReglas($permisos, $reglasActuales);
+            $msg .= $this->actualizaReglas($arregloReglas['comunes']);
+            $msg .= $this->agregaReglas($arregloReglas['nuevas']);
+            $msg .= $this->eliminaReglas($arregloReglas['deprecadas']);
         }
-        if ($myRules) 
-            $msg = 'Autorizado el usuario '.$user ."\n". $out;
-        else
-            $msg = $this->create_rules($user,$permisos);
+        // $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="sg-019ae8142b0becfb8"');
+        // $output = json_decode($output, true);
+        // $myRules = false;
+        // $msg = 'Error mientras se internta autorizar a '.$user;
+        // $out = '';
+        // foreach($output['SecurityGroupRules'] as $rule) {
+        //     if ($rule['Description'] == 'user-'.$user ) {
+        //         $myRules = true;
+        //         // $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
+        //         //         ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
+        //         //         ',SecurityGroupRule=\'{Description=' . $rule['Description'] .
+        //         //         ',IpProtocol=' .$rule['IpProtocol'] .
+        //         //         ',FromPort=' . $rule['FromPort'].
+        //         //         ',ToPort=' . $rule['ToPort'].
+        //         //         ',CidrIpv4='.$this->getIP().'/32}\'';
+        //         // $out .= "\n".$change ."\n". shell_exec($change);
+        //     }
+        // }
+        // if ($myRules) 
+        //     $msg = 'Autorizado el usuario '.$user ."\n". $out;
+        // else
+        //     $msg = $this->create_rules($user,$permisos);
         return $msg;
     }
+
+    private function obtenerSGdesdePermisos($permisos) {
+        $sgids = array();
+        foreach($permisos as $permiso) {
+            if (! in_array($permiso['sgid'], $sgids)) {
+                $sgids[] = $permiso['sgid'];
+            }
+        }
+        return $sgids;
+    }
+
+    private function obtenerReglasFromSG($SG, $user='') {
+        $output = shell_exec('aws ec2 describe-security-group-rules --filters Name="group-id",Values="'.$SG.'"');
+        $output = json_decode($output, true);
+        $salida = array();
+        if (!empty($user)) {
+            foreach($output['SecurityGroupRules'] as $rule) {
+                if ($rule['Description'] == 'user-'.$user ) {
+                    $salida[]=$rule;
+                }
+            }
+        } else {
+            $salida = $output;
+        }
+        return $salida;
+    }
+
+    private function diferenciaDeReglas ($permisos, $reglasActuales) {
+        # revisar y catalogar las reglas en las comunes,
+        # las que existen solo en los permisos (nuevas)
+        # y las que existe solo en las actuales (deprecadas)
+        echo 'Permisos: '.print_r($permisos,true);
+        echo 'reglas: '.print_r($reglasActuales,true);
+    }
+
+    private function actualizaReglas ($rules) {
+        # contiene reglas desde el SG actual, actualizar IP
+        $msg = '';
+        foreach ($rules as $rule) {
+            $change='aws ec2 modify-security-group-rules --group-id '. $rule['GroupId'] .
+                ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
+                ',SecurityGroupRule=\'{Description=' . $rule['Description'] .
+                ',IpProtocol=' .$rule['IpProtocol'] .
+                ',FromPort=' . $rule['FromPort'].
+                ',ToPort=' . $rule['ToPort'].
+                ',CidrIpv4='.$this->getIP().'/32}\'';
+            $out = shell_exec($change);
+            $msg .= ', en '. $rule['GroupId'] . ' actualizada IP para puerto '.$rule['ToPort'];
+        }
+        return $msg;
+    }
+    
+    private function agregaReglas($rules){}
+    private function eliminaReglas($rules){}
 
     private function create_rules ($user, $permisos) {
         return 'Falta create_rules()';
@@ -89,6 +152,3 @@ class SG {
 //     {
 //         "Return": true
 //     }
-// aws ec2 modify-security-group-rules \
-//     --group-id sg-019ae8142b0becfb8 \
-//     --security-group-rules SecurityGroupRuleId=sgr-0c8bbc4dc1276b9ac,SecurityGroupRule='{Description=user-admin,IpProtocol=tcp,FromPort=443,ToPort=443,CidrIpv4=201.189.202.132/32}'
