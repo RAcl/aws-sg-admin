@@ -32,7 +32,7 @@ class Main {
     private function limpia($dato) {
         $x = array();
         foreach($dato as $i => $v) {
-            $x[$i] = preg_replace("/[\s,;%]+/",'',$v);
+            $x[$i] = preg_replace("/[\s,;%]+/",'_',trim($v));
         }
         return $x;
     }
