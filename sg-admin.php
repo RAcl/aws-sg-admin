@@ -139,7 +139,7 @@ class SG {
             echo "<br>agrega: ".print_r($rule, true);
             $add = 'aws ec2 authorize-security-group-ingress --group-id ' .
                     $rule['sgid'] .
-                    '--ip-permissions IpProtocol=tcp,FromPort=' . $rule['puerto'] .
+                    ' --ip-permissions IpProtocol=tcp,FromPort=' . $rule['puerto'] .
                     ',ToPort=' . $rule['puerto'] .
                     ',IpRanges="[{CidrIp='.$this->getIP() .
                     '/32,Description=user-'.$rule['alias'].'}]" ' .
@@ -154,11 +154,11 @@ class SG {
         $msg = '';
         foreach ($rules as $rule) {
             echo "<br>elimina: ".print_r($rule, true);
-            $del = 'aws ec2 revoke-security-group-ingress ' .
-                    '--group-id ' . $rule['GroupId'] .
-                    '--protocol ' . $rule['IpProtocol'] .
-                    '--port ' . $rule['FromPort'] .
-                    '--cidr ' . $rule['CidrIpv4'];
+            $del = 'aws ec2 revoke-security-group-ingress' .
+                    ' --group-id ' . $rule['GroupId'] .
+                    ' --protocol ' . $rule['IpProtocol'] .
+                    ' --port ' . $rule['FromPort'] .
+                    ' --cidr ' . $rule['CidrIpv4'];
             echo "<br>del= ".print_r($del, true);
             $out = shell_exec($del);
             $msg .= ', en '. $rule['sgid'] . ' quitada regla para puerto '.$rule['puerto'];
