@@ -117,6 +117,7 @@ class SG {
         # contiene reglas desde el SG actual, actualizar IP
         $msg = '';
         foreach ($rules as $rule) {
+            echo "<br>".print_r($rule, true);
             $change='aws ec2 modify-security-group-rules' .
                 ' --group-id '. $rule['GroupId'] .
                 ' --security-group-rules SecurityGroupRuleId='. $rule['SecurityGroupRuleId'] .
@@ -134,6 +135,7 @@ class SG {
     private function agregaReglas($rules) {
         $msg = '';
         foreach ($rules as $rule) {
+            echo "<br>".print_r($rule, true);
             $add = 'aws ec2 authorize-security-group-ingress --group-id ' .
                     $rule['sgid'] .
                     '--ip-permissions IpProtocol=tcp,FromPort=' . $rule['puerto'] .
@@ -149,6 +151,7 @@ class SG {
     private function eliminaReglas($rules) {
         $msg = '';
         foreach ($rules as $rule) {
+            echo "<br>".print_r($rule, true);
             $del = 'aws ec2 revoke-security-group-ingress ' .
                     '--group-id ' . $rule['GroupId'] .
                     '--protocol ' . $rule['IpProtocol'] .
