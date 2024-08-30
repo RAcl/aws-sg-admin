@@ -39,6 +39,7 @@ class Main {
 
     private function login ($Pdata) {
         $Pdata = $this->limpia($Pdata);
+        print_r($Pdata);
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
         if ($id) {
             if ($this->data->es_admin($id)) {
