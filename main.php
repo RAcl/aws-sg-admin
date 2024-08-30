@@ -39,7 +39,7 @@ class Main {
 
     private function login ($Pdata) {
         $Pdata = $this->limpia($Pdata);
-        print_r($Pdata);
+        //print_r($Pdata);
         $id = $this->data->validaUsuario($Pdata['user'],$Pdata['token']);
         if ($id) {
             if ($this->data->es_admin($id)) {
@@ -91,9 +91,11 @@ class Main {
             $ports = preg_split("/[\s,]+/", $Pdata['port'], -1, PREG_SPLIT_NO_EMPTY);
             foreach($ports as $port) {
                 $id = $this->data->registrarPermiso($Pdata['gid'], $Pdata['uid'], $port);
-                $resp = $this->sg->
                 $msg .= ($id?'Creado permiso al puerto '.$port.' con ID:'.$id:'Falló el registro del puerto '.$port).'<br>';
             }
+        } elseif (isset($_GET['quitar']) && isset($Pdata['id'])) {
+            $logrado = $this->data->eliminarPermiso($id);
+            $msg = ($id?'Eliminado '.$id.', usuario:"'.$Pdata['user'].'" con token:"'.$Pdata['token'].'"':'Falló el registro del usaurio '.$Pdata['user']);
         }
         return $msg;
     }
@@ -131,10 +133,13 @@ class Main {
         $msg = '<fieldset><legend>Permisos actuales</legend>';
         $sgs = $this->data->listarGruposSeguridad();
         foreach($sgs as $sg) {
-            $msg .= '<fieldset><legend>Security Group '.$sg['sgid'].'</legend><table><tr><th>Alias</th><th>Puerto</th></tr>';
+            $msg .= '<fieldset><legend>Security Group '.$sg['sgid'].'</legend><table><tr><th>Alias</th><th>Puerto</th><th>Quitar</th></tr>';
             $permisos = $this->data->getPermisoGrupoSeguridad($sg['id']);
             foreach($permisos as $permiso) {
-                $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].'</td></tr>';
+                $msg .= '<tr><td class="gris1">'.$permiso['alias'].'</td><td>'.$permiso['puerto'].
+                '</td><td><form method="post" enctype="multipart/form-data" action="?quitar">'.
+                '<input type="hidden" name="id" value="'.$permiso['id'].'"><button type="submit">Quitar</button>'.
+                '</form></td></tr>';
             }
             $msg .= '</table></fieldset>';
         }
