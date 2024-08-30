@@ -6,7 +6,7 @@ class SG {
         $sgids = $this->obtenerSGdesdePermisos($permisos);
         foreach($sgids as $sgid) {
             $reglasActuales = $this->obtenerReglasFromSG($sgid, $user);
-            $permisosDelSG = $this->obtenerPermisosFiltadoSG($sgid);
+            $permisosDelSG = $this->obtenerPermisosFiltadoSG($permisos, $sgid);
             $arregloReglas = $this->diferenciaDeReglas($permisosDelSG, $reglasActuales);
             $msg .= $this->actualizaReglas($arregloReglas['comunes']);
             $msg .= $this->agregaReglas($arregloReglas['nuevas']);
@@ -47,7 +47,7 @@ class SG {
         return $sgids;
     }
 
-    private function obtenerPermisosFiltadoSG($sgid) {
+    private function obtenerPermisosFiltadoSG($permisos, $sgid) {
         $p = array();
         foreach($permisos as $permiso) {
             if ($permiso['sgid'] == $sgid) {
