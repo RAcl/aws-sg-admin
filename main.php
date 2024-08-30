@@ -94,7 +94,7 @@ class Main {
                 $msg .= ($id?'Creado permiso al puerto '.$port.' con ID:'.$id:'Falló el registro del puerto '.$port).'<br>';
             }
         } elseif (isset($_GET['quitar']) && isset($Pdata['id'])) {
-            $logrado = $this->data->eliminarPermiso($id);
+            $logrado = $this->data->eliminarPermiso($Pdata['id']);
             $msg = ($id?'Permiso eliminado ':'Error al eliminar '.$Pdata['id']);
         }
         return $msg;
