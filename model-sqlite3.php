@@ -19,7 +19,7 @@ class DB {
         $this->db->exec('CREATE TABLE grupoSeguridad (descripcion TEXT, sgid TEXT, region TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);');
         $this->db->exec('CREATE TABLE permiso (puerto INTEGER, id_usuario INTEGER, id_grupoSeguridad INTEGER, id INTEGER PRIMARY KEY AUTOINCREMENT);');
         $pass = shell_exec('date | md5sum | awk \'{print $1}\'');
-        $this->registrarUsuario('admin',$pass);
+        $this->registrarUsuario('admin',trim($pass));
         $this->db->exec('INSERT INTO administrador values (1);');
         echo "Creado admin con token $pass";
     }
